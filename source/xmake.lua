@@ -7,12 +7,12 @@ target("client-library")
 
     set_kind("shared")
 
-    add_files("src/test.c")
+    add_files("src/client-library/test.c")
 
 target("client")
     set_kind("binary")
 
-    add_files("src/*.c")
+    add_files("src/client/*.c")
     
     add_deps("client-library")
 
