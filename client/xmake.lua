@@ -3,14 +3,21 @@
 add_rules("mode.debug", "mode.release")
 
 -- add target
-target("client")
+target("client-library")
 
-    -- set kind
+    set_kind("shared")
+
+    add_files("src/test.c")
+
+target("client")
     set_kind("binary")
 
-    -- add files
     add_files("src/*.c")
+    
+    add_deps("client-library")
 
+
+--Don't foget to write the correct type *.c
 --
 -- If you want to known more usage about xmake, please see https://xmake.io
 --
