@@ -62,4 +62,5 @@ target_link_libraries(${executable}
 	${CMAKE_DL_LIBS}
 	${CMAKE_SOURCE_DIR}/lib/RakNetDll.lib
 	${CMAKE_SOURCE_DIR}/lib/steam_api64.lib
+	${CMAKE_SOURCE_DIR}/lib/PolyHook_2.lib
 )
