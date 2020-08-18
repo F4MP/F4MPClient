@@ -38,7 +38,8 @@ file(GLOB SourceFiles
 	${SrcDIR}/*
 )
 
-add_executable(${executable} ${SourceFiles})
+#add_executable(${executable} ${SourceFiles})
+add_library(${executable} SHARED ${SourceFiles})
 
 set_target_properties(${executable} PROPERTIES
 	CXX_STANDARD 17
