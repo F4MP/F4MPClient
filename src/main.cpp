@@ -1,13 +1,21 @@
 #include <windows.h>
 #include <iostream>
 
+void Main(void){
+    
+    AllocConsole();
+
+    freopen("CONOUT$","w",stdout);
+
+    
+}
+
 BOOL WINAPI DllMain(HINSTANCE hinstDLL,  DWORD fdwReason, LPVOID lpReserved ){
 
     switch(fdwReason)
     {
         case DLL_PROCESS_ATTACH:
-         // Initialize once for each new process.
-         // Return FALSE to fail DLL load.
+            CreateThread(NULL,NULL,(LPTHREAD_START_ROUTINE)Main,NULL,NULL,NULL);
             break;
 
         case DLL_THREAD_ATTACH:
