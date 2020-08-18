@@ -1,25 +1,34 @@
 #include <windows.h>
 #include <iostream>
+#include <assert.h>
+#include <string>
 #include <steam/isteamfriends.h>
 
-void Main(void){
-    
+
+void Main(){
     AllocConsole();
 
-    freopen_s((FILE**)stdout, "CONOUT$", "w", stdout);
+    FILE* f;
+	freopen_s(&f, "CONOUT$", "w", stdout);
 
-    ISteamFriends* SteamFriends;
     
-    std::cout << SteamFriends->GetPersonaName() << std::endl;
+    std::cout << SteamFriends()->GetPersonaName() << std::endl;
 
 }
 
-BOOL WINAPI DllMain(HINSTANCE hinstDLL,  DWORD fdwReason, LPVOID lpReserved ){
+BOOL APIENTRY DllMain(HMODULE hModule,
+	DWORD  ul_reason_for_call,
+	LPVOID lpReserved){
 
-    switch(fdwReason)
+    switch(ul_reason_for_call)
     {
         case DLL_PROCESS_ATTACH:
-            CreateThread(NULL,NULL,(LPTHREAD_START_ROUTINE)Main,NULL,NULL,NULL);
+            CloseHandle(CreateThread(nullptr ,0 ,(LPTHREAD_START_ROUTINE)Main ,hModule ,0 ,nullptr));
+             MessageBox(NULL, "I got attached", "Dll says:", MB_OK);
+            break;
+
+        case DLL_PROCESS_DETACH:
+            MessageBox(NULL, "I got detached", "Dll says:", MB_OK);
             break;
 
         case DLL_THREAD_ATTACH:
