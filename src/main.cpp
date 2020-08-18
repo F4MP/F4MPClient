@@ -1,13 +1,17 @@
 #include <windows.h>
 #include <iostream>
+#include <steam/isteamfriends.h>
 
 void Main(void){
     
     AllocConsole();
 
-    freopen("CONOUT$","w",stdout);
+    freopen_s((FILE**)stdout, "CONOUT$", "w", stdout);
 
+    ISteamFriends* SteamFriends;
     
+    std::cout << SteamFriends->GetPersonaName() << std::endl;
+
 }
 
 BOOL WINAPI DllMain(HINSTANCE hinstDLL,  DWORD fdwReason, LPVOID lpReserved ){
