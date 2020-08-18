@@ -60,4 +60,5 @@ endif (WIN32)
 
 target_link_libraries(${executable}
 	${CMAKE_DL_LIBS}
+	${CMAKE_SOURCE_DIR}/lib/RakNetDll.lib
 )
