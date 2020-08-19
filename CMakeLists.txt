@@ -39,7 +39,7 @@ file(GLOB SourceFiles
 )
 
 #add_executable(${executable} ${SourceFiles})
-add_library(${executable} SHARED ${SourceFiles})
+add_library(${executable} SHARED ${SourceFiles} src/Game.cpp src/Game.h src/DirectXHook.cpp src/DirectXHook.h)
 
 set_target_properties(${executable} PROPERTIES
 	CXX_STANDARD 17

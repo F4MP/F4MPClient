@@ -12,11 +12,7 @@ DWORD WINAPI Main(LPVOID lpThreadParameter){
     freopen_s((FILE**)stdout, "CONOUT$", "w", stdout);
     std::cout << "This works" << std::endl;
 
-    try {
-        std::cout << SteamFriends()->GetPersonaName() << std::endl;
-    }catch(const std::runtime_error &e){
-        std::cout << e.what() << std::endl;
-    }
+
 
     return TRUE;
 }
