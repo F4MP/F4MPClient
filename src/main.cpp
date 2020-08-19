@@ -2,42 +2,42 @@
 #include <iostream>
 #include <assert.h>
 #include <string>
-#include <steam/isteamfriends.h>
+#include <thread>
+#include <steam/steam_api.h>
 
 
-void Main(){
+DWORD WINAPI Main(LPVOID lpThreadParameter){
+
     AllocConsole();
+    freopen_s((FILE**)stdout, "CONOUT$", "w", stdout);
+    std::cout << "This works" << std::endl;
 
-    FILE* f;
-	freopen_s(&f, "CONOUT$", "w", stdout);
+    try {
+        std::cout << SteamFriends()->GetPersonaName() << std::endl;
+    }catch(const std::runtime_error &e){
+        std::cout << e.what() << std::endl;
+    }
 
-    
-    std::cout << SteamFriends()->GetPersonaName() << std::endl;
+    return TRUE;
+}
 
+BOOL WINAPI Detach(){
+    return TRUE;
 }
 
 BOOL APIENTRY DllMain(HMODULE hModule,
 	DWORD  ul_reason_for_call,
 	LPVOID lpReserved){
 
-    switch(ul_reason_for_call)
-    {
-        case DLL_PROCESS_ATTACH:
-            CloseHandle(CreateThread(nullptr ,0 ,(LPTHREAD_START_ROUTINE)Main ,hModule ,0 ,nullptr));
-             MessageBox(NULL, "I got attached", "Dll says:", MB_OK);
-            break;
+    if (ul_reason_for_call == DLL_PROCESS_ATTACH) {
+        DisableThreadLibraryCalls( hModule );
 
-        case DLL_PROCESS_DETACH:
-            MessageBox(NULL, "I got detached", "Dll says:", MB_OK);
-            break;
-
-        case DLL_THREAD_ATTACH:
-         // Do thread-specific initialization.
-            break;
-
-        case DLL_THREAD_DETACH:
-            
-            break;
+        if ( auto handle = CreateThread( nullptr, NULL, Main, hModule, NULL, nullptr ) )
+        {
+            CloseHandle( handle );
+        }
+    }else if(ul_reason_for_call == DLL_PROCESS_DETACH && !lpReserved){
+        return Detach();
     }
 
     return TRUE;

@@ -10,7 +10,7 @@
 #pragma once
 #endif
 
-#include "steam_api_common.h"
+#include "isteamclient.h"
 
 // callbacks
 #if defined( VALVE_CALLBACK_PACK_SMALL )
@@ -18,7 +18,7 @@
 #elif defined( VALVE_CALLBACK_PACK_LARGE )
 #pragma pack( push, 8 )
 #else
-#error steam_api_common.h should define VALVE_CALLBACK_PACK_xxx
+#error isteamclient.h must be included
 #endif
 
 
@@ -36,30 +36,22 @@ public:
 
 	// returns true if user is uploading a live broadcast
 	virtual bool IsBroadcasting( int *pnNumViewers ) = 0;
-
-	// Get the OPF Details for 360 Video Playback
-	STEAM_CALL_BACK( GetOPFSettingsResult_t )
-	virtual void GetOPFSettings( AppId_t unVideoAppID ) = 0;
-	virtual bool GetOPFStringForApp( AppId_t unVideoAppID, char *pchBuffer, int32 *pnBufferSize ) = 0;
 };
 
-#define STEAMVIDEO_INTERFACE_VERSION "STEAMVIDEO_INTERFACE_V002"
+#define STEAMVIDEO_INTERFACE_VERSION "STEAMVIDEO_INTERFACE_V001"
 
-// Global interface accessor
-inline ISteamVideo *SteamVideo();
-STEAM_DEFINE_USER_INTERFACE_ACCESSOR( ISteamVideo *, SteamVideo, STEAMVIDEO_INTERFACE_VERSION );
+DEFINE_CALLBACK( BroadcastUploadStart_t, k_iClientVideoCallbacks + 4 )
+END_DEFINE_CALLBACK_0()
 
-STEAM_CALLBACK_BEGIN( GetVideoURLResult_t, k_iClientVideoCallbacks + 11 )
-	STEAM_CALLBACK_MEMBER( 0, EResult, m_eResult )
-	STEAM_CALLBACK_MEMBER( 1, AppId_t, m_unVideoAppID )
-	STEAM_CALLBACK_MEMBER( 2, char, m_rgchURL[256] )
-STEAM_CALLBACK_END(3)
+DEFINE_CALLBACK( BroadcastUploadStop_t, k_iClientVideoCallbacks + 5 )
+	CALLBACK_MEMBER( 0, EBroadcastUploadResult, m_eResult )
+END_DEFINE_CALLBACK_1()
 
-
-STEAM_CALLBACK_BEGIN( GetOPFSettingsResult_t, k_iClientVideoCallbacks + 24 )
-	STEAM_CALLBACK_MEMBER( 0, EResult, m_eResult )
-	STEAM_CALLBACK_MEMBER( 1, AppId_t, m_unVideoAppID )
-STEAM_CALLBACK_END(2)
+DEFINE_CALLBACK( GetVideoURLResult_t, k_iClientVideoCallbacks + 11 )
+	CALLBACK_MEMBER( 0, EResult, m_eResult )
+	CALLBACK_MEMBER( 1, AppId_t, m_unVideoAppID )
+	CALLBACK_MEMBER( 2, char, m_rgchURL[256] )
+END_DEFINE_CALLBACK_1()
 
 
 #pragma pack( pop )
