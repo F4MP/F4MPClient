@@ -36,10 +36,11 @@ include_directories(${executable}
 
 file(GLOB SourceFiles 
 	${SrcDIR}/*
+	${SrcDIR}/ThirdParty/*
 )
 
 #add_executable(${executable} ${SourceFiles})
-add_library(${executable} SHARED ${SourceFiles} src/Game.cpp src/Game.h src/DirectXHook.cpp src/DirectXHook.h)
+add_library(${executable} SHARED ${SourceFiles})
 
 set_target_properties(${executable} PROPERTIES
 	CXX_STANDARD 17
@@ -62,5 +63,7 @@ target_link_libraries(${executable}
 	${CMAKE_DL_LIBS}
 	${CMAKE_SOURCE_DIR}/lib/RakNetDll.lib
 	${CMAKE_SOURCE_DIR}/lib/steam_api64.lib
-	${CMAKE_SOURCE_DIR}/lib/PolyHook_2.lib
+	${CMAKE_SOURCE_DIR}/lib/detours.lib
+	${CMAKE_SOURCE_DIR}/lib/d3d11.lib
+	dxgi.dll
 )

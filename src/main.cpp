@@ -5,12 +5,18 @@
 #include <thread>
 #include <steam/steam_api.h>
 
+#include "Direct3D11.h"
+
 
 DWORD WINAPI Main(LPVOID lpThreadParameter){
 
+
     AllocConsole();
     freopen_s((FILE**)stdout, "CONOUT$", "w", stdout);
-    std::cout << "This works" << std::endl;
+    std::cout << "~~CONSOLE LOADED~~" << std::endl;
+
+    Direct3D11Hooking::Direct3D11 h_d3d11;
+
 
 
 
@@ -18,6 +24,7 @@ DWORD WINAPI Main(LPVOID lpThreadParameter){
 }
 
 BOOL WINAPI Detach(){
+
     return TRUE;
 }
 
@@ -38,3 +45,4 @@ BOOL APIENTRY DllMain(HMODULE hModule,
 
     return TRUE;
 }
+
