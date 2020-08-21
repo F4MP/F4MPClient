@@ -53,12 +53,12 @@ class Hook
         {
             if (result == ERROR_INVALID_OPERATION)
             {
-                throw Indicium::Core::Exceptions::DetourException(
+                throw F4MP::Core::Exceptions::DetourException(
                         "A pending transaction already exists"
                 );
             }
 
-            throw Indicium::Core::Exceptions::DetourException("Unknown error");
+            throw F4MP::Core::Exceptions::DetourException("Unknown error");
         }
 
         has_open_transaction_ = true;
@@ -73,32 +73,32 @@ class Hook
             switch (result)
             {
                 case ERROR_INVALID_DATA:
-                    throw Indicium::Core::Exceptions::DetourException(
+                    throw F4MP::Core::Exceptions::DetourException(
                             "Target function was changed by third party between steps of the transaction"
                     );
 
                 case ERROR_INVALID_OPERATION:
-                    throw Indicium::Core::Exceptions::DetourException(
+                    throw F4MP::Core::Exceptions::DetourException(
                             "No pending transaction exists"
                     );
 
                 case ERROR_INVALID_BLOCK:
-                    throw Indicium::Core::Exceptions::DetourException(
+                    throw F4MP::Core::Exceptions::DetourException(
                             "The function referenced is too small to be detoured"
                     );
 
                 case ERROR_INVALID_HANDLE:
-                    throw Indicium::Core::Exceptions::DetourException(
+                    throw F4MP::Core::Exceptions::DetourException(
                             "The ppPointer parameter is null or points to a null pointer"
                     );
 
                 case ERROR_NOT_ENOUGH_MEMORY:
-                    throw Indicium::Core::Exceptions::DetourException(
+                    throw F4MP::Core::Exceptions::DetourException(
                             "Not enough memory exists to complete the operation"
                     );
 
                 default:
-                    throw Indicium::Core::Exceptions::DetourException(
+                    throw F4MP::Core::Exceptions::DetourException(
                             "Unknown error"
                     );
             }
@@ -115,12 +115,12 @@ class Hook
         {
             if (result == ERROR_NOT_ENOUGH_MEMORY)
             {
-                throw Indicium::Core::Exceptions::DetourException(
+                throw F4MP::Core::Exceptions::DetourException(
                         "Not enough memory to record identity of thread"
                 );
             }
 
-            throw Indicium::Core::Exceptions::DetourException("Unknown error");
+            throw F4MP::Core::Exceptions::DetourException("Unknown error");
         }
     }
 
@@ -139,11 +139,11 @@ public:
             {
                 if (result == ERROR_INVALID_OPERATION)
                 {
-                    throw Indicium::Core::Exceptions::DetourException(
+                    throw F4MP::Core::Exceptions::DetourException(
                             "No pending transaction exists"
                     );
                 }
-                throw Indicium::Core::Exceptions::DetourException("Unknown error");
+                throw F4MP::Core::Exceptions::DetourException("Unknown error");
             }
         }
 
@@ -165,27 +165,27 @@ public:
             switch (result)
             {
                 case ERROR_INVALID_BLOCK:
-                    throw Indicium::Core::Exceptions::DetourException(
+                    throw F4MP::Core::Exceptions::DetourException(
                             "The function referenced is too small to be detoured"
                     );
 
                 case ERROR_INVALID_HANDLE:
-                    throw Indicium::Core::Exceptions::DetourException(
+                    throw F4MP::Core::Exceptions::DetourException(
                             "The ppPointer parameter is null or points to a null pointer"
                     );
 
                 case ERROR_INVALID_OPERATION:
-                    throw Indicium::Core::Exceptions::DetourException(
+                    throw F4MP::Core::Exceptions::DetourException(
                             "No pending transaction exists"
                     );
 
                 case ERROR_NOT_ENOUGH_MEMORY:
-                    throw Indicium::Core::Exceptions::DetourException(
+                    throw F4MP::Core::Exceptions::DetourException(
                             "Not enough memory exists to complete the operation"
                     );
 
                 default:
-                    throw Indicium::Core::Exceptions::DetourException("Unknown error");
+                    throw F4MP::Core::Exceptions::DetourException("Unknown error");
             }
         }
 
@@ -210,27 +210,27 @@ public:
             switch (result)
             {
                 case ERROR_INVALID_BLOCK:
-                    throw Indicium::Core::Exceptions::DetourException(
+                    throw F4MP::Core::Exceptions::DetourException(
                             "The function to be detached was too small to be detoured"
                     );
 
                 case ERROR_INVALID_HANDLE:
-                    throw Indicium::Core::Exceptions::DetourException(
+                    throw F4MP::Core::Exceptions::DetourException(
                             "The ppPointer parameter is null or points to a null pointer"
                     );
 
                 case ERROR_INVALID_OPERATION:
-                    throw Indicium::Core::Exceptions::DetourException(
+                    throw F4MP::Core::Exceptions::DetourException(
                             "No pending transaction exists"
                     );
 
                 case ERROR_NOT_ENOUGH_MEMORY:
-                    throw Indicium::Core::Exceptions::DetourException(
+                    throw F4MP::Core::Exceptions::DetourException(
                             "Not enough memory exists to complete the operation"
                     );
 
                 default:
-                    throw Indicium::Core::Exceptions::DetourException(
+                    throw F4MP::Core::Exceptions::DetourException(
                             "Unknown error"
                     );
             }

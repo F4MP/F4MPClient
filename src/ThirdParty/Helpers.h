@@ -17,7 +17,7 @@ void _Error(std::string msg){
 }
 
 #define LOG(msg) std::cout << msg  << std::endl;
-#define ERROR(msg) _Error(msg);
+#define LOGERR(msg) _Error(msg);
 
 #define INVOKE_D3D11_CALLBACK(_engine_, _callback_, ...)     \
                              (_engine_->EventsD3D11._callback_ ? \
