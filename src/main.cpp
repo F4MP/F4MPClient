@@ -15,7 +15,7 @@ static Hook<CallConvention::stdcall_t, HRESULT, IDXGISwapChain*, UINT, UINT> swa
 static Hook<CallConvention::stdcall_t, HRESULT, IDXGISwapChain*, const DXGI_MODE_DESC*> swapChainResizeTarget11Hook;
 static Hook<CallConvention::stdcall_t, HRESULT, IDXGISwapChain*, UINT, UINT, UINT, DXGI_FORMAT, UINT> swapChainResizeBuffers11Hook;
 
-
+using namespace F4MP::Core::Exceptions;
 
 DWORD WINAPI Main(LPVOID lpThreadParameter){
 
@@ -40,8 +40,7 @@ DWORD WINAPI Main(LPVOID lpThreadParameter){
             static std::once_flag flag;
             std::call_once(flag, [&pChain = chain]()
             {
-                spdlog::get("indicium")->clone("d3d11")->info("++ IDXGISwapChain::Present called");
-
+                LOG("++ IDXGISwapChain::Present called");
 
 
                 engine->RenderPipeline.pSwapChain = pChain;
@@ -77,10 +76,10 @@ DWORD WINAPI Main(LPVOID lpThreadParameter){
             return ret;
         });
 
-        
+
         LOG("Hooking IDXGISwapChain::ResizeTarget");
 
-        swapChainResizeTarget11Hook.apply(vtable[DXGIHooking::ResizeTarget], [](
+        swapChainResizeTarget11Hook.apply(vtable[hDXGI:::ResizeTarget], [](
                 IDXGISwapChain* chain,
                 const DXGI_MODE_DESC* pNewTargetParameters
         ) -> HRESULT
@@ -88,7 +87,7 @@ DWORD WINAPI Main(LPVOID lpThreadParameter){
             static std::once_flag flag;
             std::call_once(flag, []()
             {
-                spdlog::get("indicium")->clone("d3d11")->info("++ IDXGISwapChain::ResizeTarget called");
+                LOG("++ IDXGISwapChain::ResizeTarget called");
             });
 
             INDICIUM_EVT_PRE_EXTENSION pre;
@@ -117,9 +116,9 @@ DWORD WINAPI Main(LPVOID lpThreadParameter){
             return ret;
         });
 
-        logger->info("Hooking IDXGISwapChain::ResizeBuffers");
+        LOG("Hooking IDXGISwapChain::ResizeBuffers");
 
-        swapChainResizeBuffers11Hook.apply(vtable[DXGIHooking::ResizeBuffers], [](
+        swapChainResizeBuffers11Hook.apply(vtable[hDXGI::ResizeBuffers], [](
                 IDXGISwapChain* chain,
                 UINT            BufferCount,
                 UINT            Width,
@@ -131,7 +130,7 @@ DWORD WINAPI Main(LPVOID lpThreadParameter){
             static std::once_flag flag;
             std::call_once(flag, []()
             {
-                spdlog::get("indicium")->clone("d3d11")->info("++ IDXGISwapChain::ResizeBuffers called");
+                LOG("++ IDXGISwapChain::ResizeBuffers called");
             });
 
             INDICIUM_EVT_PRE_EXTENSION pre;
@@ -153,15 +152,15 @@ DWORD WINAPI Main(LPVOID lpThreadParameter){
     }
     catch (DetourException& ex)
     {
-        logger->error("Hooking D3D11 failed: {}", ex.what());
+        ERROR("Hooking D3D11 failed: " + std::string(ex.what()));
     }
     catch (ModuleNotFoundException& ex)
     {
-        logger->warn("Module not found: {}", ex.what());
+        ERROR("Module not found: " + std::string(ex.what()));
     }
     catch (RuntimeException& ex)
     {
-        logger->error("D3D11 runtime error: {}", ex.what());
+        ERROR("D3D11 runtime error: " + std::string(ex.what()));
     }
 
     return TRUE;

@@ -7,10 +7,17 @@
 
 #include <iostream>
 
+HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
+void _Error(std::string msg){
+
+    SetConsoleTextAttribute(hConsole, 04);
+    std::cout << msg << std::endl;
+    SetConsoleTextAttribute(hConsole, 15);
+}
 
 #define LOG(msg) std::cout << msg  << std::endl;
-
+#define ERROR(msg) _Error(msg);
 
 #define INVOKE_D3D11_CALLBACK(_engine_, _callback_, ...)     \
                              (_engine_->EventsD3D11._callback_ ? \
