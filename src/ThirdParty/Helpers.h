@@ -16,7 +16,11 @@ void _Error(std::string msg){
     SetConsoleTextAttribute(hConsole, 15);
 }
 
-#define LOG(msg) std::cout << msg  << std::endl;
+void _Log(std::string msg){
+    std::cout << msg << std::endl;
+}
+
+#define LOG(msg) _Log(msg);
 #define LOGERR(msg) _Error(msg);
 
 #define INVOKE_D3D11_CALLBACK(_engine_, _callback_, ...)     \

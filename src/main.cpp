@@ -11,11 +11,15 @@
 
 #include <mutex>
 
+#include <d3d11.h>
+
 static Hook<CallConvention::stdcall_t, HRESULT, IDXGISwapChain*, UINT, UINT> swapChainPresent11Hook;
 static Hook<CallConvention::stdcall_t, HRESULT, IDXGISwapChain*, const DXGI_MODE_DESC*> swapChainResizeTarget11Hook;
 static Hook<CallConvention::stdcall_t, HRESULT, IDXGISwapChain*, UINT, UINT, UINT, DXGI_FORMAT, UINT> swapChainResizeBuffers11Hook;
 
 IDXGISwapChain *pSwapChain;
+ID3D11Device *g_device;
+ID3D11DeviceContext *g_context;
 
 using namespace F4MP::Core::Exceptions;
 
@@ -46,18 +50,27 @@ DWORD WINAPI Main(LPVOID lpThreadParameter){
 
                 pSwapChain = pChain;
 
-                LOG(pChain);
+                LOG("SwapChain: 0x" + std::to_string((DWORD)pChain));
+
+                if (SUCCEEDED(pChain->GetDevice(__uuidof(ID3D11Device), (void **)&g_device))) {
+                    pChain->GetDevice(__uuidof(g_device), (void**)&g_device);
+
+                    g_device->GetImmediateContext(&g_context);
+
+                    LOG("Context: 0x" + std::to_string((DWORD)g_context));
+                    LOG("Device: 0x" + std::to_string((DWORD)g_device));
+                }
 
             });
 
            const auto ret = swapChainPresent11Hook.call_orig(chain, SyncInterval, Flags);
 
-
-            return ret;
+           return ret;
         });
 
 
-        LOG("Hooking IDXGISwapChain::ResizeTarget");
+       /*   WARNING:  NOT TESTED
+        * LOG("Hooking IDXGISwapChain::ResizeTarget");
 
         swapChainResizeTarget11Hook.apply(vtable[hDXGI::ResizeTarget], [](
                 IDXGISwapChain* chain,
@@ -95,7 +108,7 @@ DWORD WINAPI Main(LPVOID lpThreadParameter){
             const auto ret = swapChainResizeBuffers11Hook.call_orig(chain,
                                                                     BufferCount, Width, Height, NewFormat, SwapChainFlags);
             return ret;
-        });
+        });*/
     }
     catch (DetourException& ex)
     {
