@@ -20,8 +20,6 @@
 #include <sciter/sciter-x.h>
 
 static Hook<CallConvention::stdcall_t, HRESULT, IDXGISwapChain*, UINT, UINT> swapChainPresent11Hook;
-static Hook<CallConvention::stdcall_t, HRESULT, IDXGISwapChain*, const DXGI_MODE_DESC*> swapChainResizeTarget11Hook;
-static Hook<CallConvention::stdcall_t, HRESULT, IDXGISwapChain*, UINT, UINT, UINT, DXGI_FORMAT, UINT> swapChainResizeBuffers11Hook;
 
 IDXGISwapChain *pSwapChain;
 ID3D11Device *g_device;
@@ -33,6 +31,8 @@ BOOL g_ShowMenu = false;
 HWND window = nullptr;
 
 static WNDPROC OriginalWndProcHandler = nullptr;
+
+BOOL InitSciterEngineInstance(HWND hwnd, IDXGISwapChain* pSwapChain);
 
 
 using namespace F4MP::Core::Exceptions;
@@ -58,6 +58,15 @@ LRESULT CALLBACK hWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
     }
 
+    LOG("Initializing SciterProcND");
+    Sleep(5000);
+
+    if (uMsg != WM_CREATE && uMsg != WM_PAINT)
+    {
+        BOOL handled = FALSE;
+        LRESULT lr = SciterProcND(hWnd, uMsg, wParam, lParam, &handled);
+    }
+
     if (g_ShowMenu)
     {
         ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam);
@@ -72,12 +81,12 @@ DWORD WINAPI Main(LPVOID lpThreadParameter){
 
     AllocConsole();
     freopen_s((FILE**)stdout, "CONOUT$", "w", stdout);
-    std::cout << "~~CONSOLE LOADED~~" << std::endl;
+    LOG("Console Loaded");
 
-    OleInitialize(NULL);
+    OleInitialize(nullptr);
 
     // enable "unsafe" functions to be accessible from script
-    SciterSetOption(NULL, SCITER_SET_SCRIPT_RUNTIME_FEATURES,
+    SciterSetOption(nullptr, SCITER_SET_SCRIPT_RUNTIME_FEATURES,
                     ALLOW_FILE_IO |
                     ALLOW_SOCKET_IO |
                     ALLOW_EVAL |
@@ -121,6 +130,13 @@ DWORD WINAPI Main(LPVOID lpThreadParameter){
                     ImGui_ImplDX11_Init(g_device, g_context);
                     ImGui::GetIO().ImeWindowHandle = window;
 
+                    LOG("Initializing Sciter Engine Instance");
+                    Sleep(5000);
+
+                    if(InitSciterEngineInstance(window, pSwapChain)){
+                        LOG("Sciter Engine initialized");
+                    }
+
                     ID3D11Texture2D* pBackBuffer;
 
                     pChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);
@@ -144,6 +160,9 @@ DWORD WINAPI Main(LPVOID lpThreadParameter){
                 ImGui::ShowDemoWindow(&bShow);
             }
             ImGui::EndFrame();
+
+            SciterRenderOnDirectXWindow(window, NULL, FALSE);
+
 
             ImGui::Render();
 
@@ -172,7 +191,49 @@ DWORD WINAPI Main(LPVOID lpThreadParameter){
     }
 
 
+
     return TRUE;
+}
+
+int gFPS = 60;
+
+
+struct view_dom_event_handler : public sciter::event_handler
+{
+BEGIN_FUNCTION_MAP
+    FUNCTION_0("FPS", FPS)
+END_FUNCTION_MAP
+
+sciter::value FPS()
+{
+    return sciter::value(gFPS);
+}
+};
+
+view_dom_event_handler g_ViewDomEventHandler;
+
+
+BOOL InitSciterEngineInstance(HWND hWnd, IDXGISwapChain *pSwapChain)
+{
+    // 1. create engine instance on the window with the swap chain:
+    BOOL r = SciterCreateOnDirectXWindow(hWnd, pSwapChain);
+    if (!r) return FALSE;
+
+    SciterSetOption(hWnd, SCITER_SET_DEBUG_MODE, TRUE);
+
+    // 2. setup callback (resource loading, etc):
+    //SciterSetCallback(hWnd, SciterCallback, NULL);
+    SciterSetCallback(hWnd,NULL,NULL);
+    // 2b. setup DOM event handler:
+    sciter::attach_dom_event_handler(hWnd, &g_ViewDomEventHandler);
+
+    // 3. load HTML content in it:
+    r = SciterLoadFile(hWnd, L"https://www.google.com/");
+
+    assert(r);
+
+    // done
+    return true;
 }
 
 BOOL WINAPI Detach(){
