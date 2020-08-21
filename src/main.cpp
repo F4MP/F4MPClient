@@ -15,7 +15,7 @@ static Hook<CallConvention::stdcall_t, HRESULT, IDXGISwapChain*, UINT, UINT> swa
 static Hook<CallConvention::stdcall_t, HRESULT, IDXGISwapChain*, const DXGI_MODE_DESC*> swapChainResizeTarget11Hook;
 static Hook<CallConvention::stdcall_t, HRESULT, IDXGISwapChain*, UINT, UINT, UINT, DXGI_FORMAT, UINT> swapChainResizeBuffers11Hook;
 
-IDXGISwapChain* pSwapChain;
+IDXGISwapChain *pSwapChain;
 
 using namespace F4MP::Core::Exceptions;
 
@@ -46,33 +46,12 @@ DWORD WINAPI Main(LPVOID lpThreadParameter){
 
                 pSwapChain = pChain;
 
-//                INVOKE_INDICIUM_GAME_HOOKED(engine, IndiciumDirect3DVersion11);
+                LOG(pChain);
+
             });
 
-//            INDICIUM_EVT_PRE_EXTENSION pre;
-//            INDICIUM_EVT_PRE_EXTENSION_INIT(&pre, engine, engine->CustomContext);
-//            INDICIUM_EVT_POST_EXTENSION post;
-//            INDICIUM_EVT_POST_EXTENSION_INIT(&post, engine, engine->CustomContext);
-
-//            INVOKE_D3D11_CALLBACK(
-//                    engine,
-//                    EvtIndiciumD3D11PrePresent,
-//                    chain,
-//                    SyncInterval,
-//                    Flags,
-//                    &pre
-//            );
-//
            const auto ret = swapChainPresent11Hook.call_orig(chain, SyncInterval, Flags);
-//
-//            INVOKE_D3D11_CALLBACK(
-//                    engine,
-//                    EvtIndiciumD3D11PostPresent,
-//                    chain,
-//                    SyncInterval,
-//                    Flags,
-//                    &post
-//            );
+
 
             return ret;
         });
@@ -91,28 +70,7 @@ DWORD WINAPI Main(LPVOID lpThreadParameter){
                 LOG("++ IDXGISwapChain::ResizeTarget called");
             });
 
-//            INDICIUM_EVT_PRE_EXTENSION pre;
-//            INDICIUM_EVT_PRE_EXTENSION_INIT(&pre, engine, engine->CustomContext);
-//            INDICIUM_EVT_POST_EXTENSION post;
-//            INDICIUM_EVT_POST_EXTENSION_INIT(&post, engine, engine->CustomContext);
-
-//            INVOKE_D3D11_CALLBACK(
-//                    engine,
-//                    EvtIndiciumD3D11PreResizeTarget,
-//                    chain,
-//                    pNewTargetParameters,
-//                    &pre
-//            );
-
             const auto ret = swapChainResizeTarget11Hook.call_orig(chain, pNewTargetParameters);
-
-//            INVOKE_D3D11_CALLBACK(
-//                    engine,
-//                    EvtIndiciumD3D11PostResizeTarget,
-//                    chain,
-//                    pNewTargetParameters,
-//                    &post
-//            );
 
             return ret;
         });
@@ -134,20 +92,8 @@ DWORD WINAPI Main(LPVOID lpThreadParameter){
                 LOG("++ IDXGISwapChain::ResizeBuffers called");
             });
 
-//            INDICIUM_EVT_PRE_EXTENSION pre;
-//            INDICIUM_EVT_PRE_EXTENSION_INIT(&pre, engine, engine->CustomContext);
-//            INDICIUM_EVT_POST_EXTENSION post;
-//            INDICIUM_EVT_POST_EXTENSION_INIT(&post, engine, engine->CustomContext);
-
-//            INVOKE_D3D11_CALLBACK(engine, EvtIndiciumD3D11PreResizeBuffers, chain,
-//                                  BufferCount, Width, Height, NewFormat, SwapChainFlags, &pre);
-
             const auto ret = swapChainResizeBuffers11Hook.call_orig(chain,
                                                                     BufferCount, Width, Height, NewFormat, SwapChainFlags);
-
-//            INVOKE_D3D11_CALLBACK(engine, EvtIndiciumD3D11PostResizeBuffers, chain,
-//                                  BufferCount, Width, Height, NewFormat, SwapChainFlags, &post);
-
             return ret;
         });
     }
@@ -163,6 +109,7 @@ DWORD WINAPI Main(LPVOID lpThreadParameter){
     {
         LOGERR("D3D11 runtime error: " + std::string(ex.what()));
     }
+
 
     return TRUE;
 }
