@@ -5,7 +5,7 @@
 #include <thread>
 #include <steam/steam_api.h>
 
-#include "Direct3D11.h"
+#include "Hooks/Direct3D11.h"
 
 
 DWORD WINAPI Main(LPVOID lpThreadParameter){

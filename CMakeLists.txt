@@ -37,6 +37,7 @@ include_directories(${executable}
 file(GLOB SourceFiles 
 	${SrcDIR}/*
 	${SrcDIR}/ThirdParty/*
+	${SrcDIR}/Hooks/*
 )
 
 #add_executable(${executable} ${SourceFiles})
