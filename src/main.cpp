@@ -17,6 +17,8 @@
 
 #include <d3d11.h>
 
+#include <sciter/sciter-x.h>
+
 static Hook<CallConvention::stdcall_t, HRESULT, IDXGISwapChain*, UINT, UINT> swapChainPresent11Hook;
 static Hook<CallConvention::stdcall_t, HRESULT, IDXGISwapChain*, const DXGI_MODE_DESC*> swapChainResizeTarget11Hook;
 static Hook<CallConvention::stdcall_t, HRESULT, IDXGISwapChain*, UINT, UINT, UINT, DXGI_FORMAT, UINT> swapChainResizeBuffers11Hook;
@@ -71,6 +73,15 @@ DWORD WINAPI Main(LPVOID lpThreadParameter){
     AllocConsole();
     freopen_s((FILE**)stdout, "CONOUT$", "w", stdout);
     std::cout << "~~CONSOLE LOADED~~" << std::endl;
+
+    OleInitialize(NULL);
+
+    // enable "unsafe" functions to be accessible from script
+    SciterSetOption(NULL, SCITER_SET_SCRIPT_RUNTIME_FEATURES,
+                    ALLOW_FILE_IO |
+                    ALLOW_SOCKET_IO |
+                    ALLOW_EVAL |
+                    ALLOW_SYSINFO);
 
     try
     {
