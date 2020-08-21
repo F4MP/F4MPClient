@@ -38,6 +38,7 @@ file(GLOB SourceFiles
 	${SrcDIR}/*
 	${SrcDIR}/ThirdParty/*
 	${SrcDIR}/Hooks/*
+	${SrcDIR}/imgui/*
 )
 
 #add_executable(${executable} ${SourceFiles})

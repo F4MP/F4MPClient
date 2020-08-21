@@ -11,6 +11,10 @@
 
 #include <mutex>
 
+#include "imgui/imgui.h"
+#include "imgui/imgui_impl_dx11.h"
+#include "imgui/imgui_impl_win32.h"
+
 #include <d3d11.h>
 
 static Hook<CallConvention::stdcall_t, HRESULT, IDXGISwapChain*, UINT, UINT> swapChainPresent11Hook;
@@ -20,8 +24,46 @@ static Hook<CallConvention::stdcall_t, HRESULT, IDXGISwapChain*, UINT, UINT, UIN
 IDXGISwapChain *pSwapChain;
 ID3D11Device *g_device;
 ID3D11DeviceContext *g_context;
+ID3D11RenderTargetView *mainRenderTargetView;
+
+BOOL g_Initialized = false;
+BOOL g_ShowMenu = false;
+HWND window = nullptr;
+
+static WNDPROC OriginalWndProcHandler = nullptr;
+
 
 using namespace F4MP::Core::Exceptions;
+
+extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+
+
+LRESULT CALLBACK hWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+    ImGuiIO& io = ImGui::GetIO();
+    POINT mPos;
+    GetCursorPos(&mPos);
+    ScreenToClient(window, &mPos);
+    ImGui::GetIO().MousePos.x = mPos.x;
+    ImGui::GetIO().MousePos.y = mPos.y;
+
+    if (uMsg == WM_KEYUP)
+    {
+        if (wParam == VK_DELETE)
+        {
+            g_ShowMenu = !g_ShowMenu;
+        }
+
+    }
+
+    if (g_ShowMenu)
+    {
+        ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam);
+        return true;
+    }
+
+    return CallWindowProc(OriginalWndProcHandler, hWnd, uMsg, wParam, lParam);
+}
 
 DWORD WINAPI Main(LPVOID lpThreadParameter){
 
@@ -53,16 +95,53 @@ DWORD WINAPI Main(LPVOID lpThreadParameter){
 
                 LOG("SwapChain: 0x" + std::to_string((DWORD)pChain));
 
-                if (SUCCEEDED(pChain->GetDevice(__uuidof(ID3D11Device), (void **)&g_device))) {
+                if (!g_Initialized && SUCCEEDED(pChain->GetDevice(__uuidof(ID3D11Device), (void **)&g_device))) {
                     pChain->GetDevice(__uuidof(g_device), (void**)&g_device);
 
                     g_device->GetImmediateContext(&g_context);
 
-                    LOG("Context: 0x" + std::to_string((DWORD)g_context));
-                    LOG("Device: 0x" + std::to_string((DWORD)g_device));
+                    DXGI_SWAP_CHAIN_DESC sd;
+                    pChain->GetDesc(&sd);
+
+                    ImGui::CreateContext();
+                    ImGuiIO& io = ImGui::GetIO(); (void)io;
+                    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+                    window = sd.OutputWindow;
+
+                    OriginalWndProcHandler = (WNDPROC)SetWindowLongPtr(window, GWLP_WNDPROC, (LONG_PTR)hWndProc);
+
+                    ImGui_ImplWin32_Init(window);
+                    ImGui_ImplDX11_Init(g_device, g_context);
+                    ImGui::GetIO().ImeWindowHandle = window;
+
+                    ID3D11Texture2D* pBackBuffer;
+
+                    pChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);
+                    g_device->CreateRenderTargetView(pBackBuffer, NULL, &mainRenderTargetView);
+                    pBackBuffer->Release();
+
+                    g_Initialized = true;
+
                 }
 
             });
+
+            ImGui_ImplWin32_NewFrame();
+            ImGui_ImplDX11_NewFrame();
+
+            ImGui::NewFrame();
+            //Menu is displayed when g_ShowMenu is TRUE
+            if (g_ShowMenu)
+            {
+                bool bShow = true;
+                ImGui::ShowDemoWindow(&bShow);
+            }
+            ImGui::EndFrame();
+
+            ImGui::Render();
+
+            g_context->OMSetRenderTargets(1, &mainRenderTargetView, NULL);
+            ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 
            const auto ret = swapChainPresent11Hook.call_orig(chain, SyncInterval, Flags);
 
@@ -70,7 +149,7 @@ DWORD WINAPI Main(LPVOID lpThreadParameter){
         });
 
 
-       
+
     }
     catch (DetourException& ex)
     {
