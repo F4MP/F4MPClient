@@ -4,9 +4,10 @@
 
 #include "Direct3D11.h"
 #include "DXGI.h"
-
 #include <iostream>
+#include "../Exceptions.h"
 
+using namespace F4MP::Core::Exceptions;
 
 hDirect3D11::Direct3D11::Direct3D11() :
         pd3dDevice(nullptr), pd3dDeviceContext(nullptr), pSwapChain(nullptr)
@@ -58,7 +59,7 @@ hDirect3D11::Direct3D11::Direct3D11() :
     ));
     if (hD3D11CreateDeviceAndSwapChain == nullptr)
     {
-        std::cout << "Could not get handle to D3D11CreateDeviceAndSwapChain" << hr11 << std::endl;
+        throw ProcAddressNotFoundException("Could not get handle to D3D11CreateDeviceAndSwapChain");
     }
 
     const auto hr11 = static_cast<HRESULT(WINAPI *)(
@@ -89,14 +90,14 @@ hDirect3D11::Direct3D11::Direct3D11() :
 
     if (FAILED(hr11))
     {
-        std::cout << "Could not create D3D11 device" << hr11 << std::endl;
+        throw DXAPIException("Could not create D3D11 device", hr11);
     }
 }
 
 std::vector<size_t> hDirect3D11::Direct3D11::vtable() const
 {
     return std::vector<size_t>(*reinterpret_cast<size_t**>(pSwapChain),
-                               *reinterpret_cast<size_t**>(pSwapChain) + DXGIHooking::DXGI::SwapChainVTableElements);
+                               *reinterpret_cast<size_t**>(pSwapChain) + hDXGI::DXGI::SwapChainVTableElements);
 }
 
 hDirect3D11::Direct3D11::~Direct3D11()

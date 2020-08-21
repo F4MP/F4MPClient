@@ -9,8 +9,8 @@
 #pragma once
 
 #include "Windows.h"
-#include <detours/detours.h>
-#include "Exceptions.hpp"
+#include <detours.h>
+#include "../Exceptions.h"
 
 
 enum class CallConvention

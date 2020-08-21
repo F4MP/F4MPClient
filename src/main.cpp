@@ -8,16 +8,13 @@
 #include "Hooks/Direct3D11.h"
 
 
+
 DWORD WINAPI Main(LPVOID lpThreadParameter){
 
 
     AllocConsole();
     freopen_s((FILE**)stdout, "CONOUT$", "w", stdout);
     std::cout << "~~CONSOLE LOADED~~" << std::endl;
-
-    Direct3D11Hooking::Direct3D11 h_d3d11;
-
-
 
 
     return TRUE;

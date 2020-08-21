@@ -63,7 +63,7 @@ namespace hDirect3D11
     };
 
     class Direct3D11 :
-            public Direct3DHooking::Direct3DBase
+            public hDirect3D11::Direct3DBase
     {
         ID3D11Device* pd3dDevice;
         ID3D11DeviceContext* pd3dDeviceContext;
