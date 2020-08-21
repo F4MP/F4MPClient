@@ -34,6 +34,7 @@ DWORD WINAPI Main(LPVOID lpThreadParameter){
     {
         const std::unique_ptr<hDirect3D11::Direct3D11> d3d11(new hDirect3D11::Direct3D11);
         auto vtable = d3d11->vtable();
+        
 
         LOG("Hooking IDXGISwapChain::Present");
 
@@ -69,46 +70,7 @@ DWORD WINAPI Main(LPVOID lpThreadParameter){
         });
 
 
-       /*   WARNING:  NOT TESTED
-        * LOG("Hooking IDXGISwapChain::ResizeTarget");
-
-        swapChainResizeTarget11Hook.apply(vtable[hDXGI::ResizeTarget], [](
-                IDXGISwapChain* chain,
-                const DXGI_MODE_DESC* pNewTargetParameters
-        ) -> HRESULT
-        {
-            static std::once_flag flag;
-            std::call_once(flag, []()
-            {
-                LOG("++ IDXGISwapChain::ResizeTarget called");
-            });
-
-            const auto ret = swapChainResizeTarget11Hook.call_orig(chain, pNewTargetParameters);
-
-            return ret;
-        });
-
-        LOG("Hooking IDXGISwapChain::ResizeBuffers");
-
-        swapChainResizeBuffers11Hook.apply(vtable[hDXGI::ResizeBuffers], [](
-                IDXGISwapChain* chain,
-                UINT            BufferCount,
-                UINT            Width,
-                UINT            Height,
-                DXGI_FORMAT     NewFormat,
-                UINT            SwapChainFlags
-        ) -> HRESULT
-        {
-            static std::once_flag flag;
-            std::call_once(flag, []()
-            {
-                LOG("++ IDXGISwapChain::ResizeBuffers called");
-            });
-
-            const auto ret = swapChainResizeBuffers11Hook.call_orig(chain,
-                                                                    BufferCount, Width, Height, NewFormat, SwapChainFlags);
-            return ret;
-        });*/
+       
     }
     catch (DetourException& ex)
     {

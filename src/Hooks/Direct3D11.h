@@ -62,8 +62,7 @@ namespace hDirect3D11
         GetExceptionMode = 42
     };
 
-    class Direct3D11 :
-            public hDirect3D11::Direct3DBase
+    class Direct3D11 : public hDirect3D11::Direct3DBase
     {
         ID3D11Device* pd3dDevice;
         ID3D11DeviceContext* pd3dDeviceContext;
