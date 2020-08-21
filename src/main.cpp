@@ -37,7 +37,6 @@ using namespace F4MP::Core::Exceptions;
 
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-
 LRESULT CALLBACK hWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     ImGuiIO& io = ImGui::GetIO();
@@ -81,11 +80,7 @@ DWORD WINAPI Main(LPVOID lpThreadParameter){
 
         LOG("Hooking IDXGISwapChain::Present");
 
-        swapChainPresent11Hook.apply(vtable[hDXGI::Present], [](
-                IDXGISwapChain* chain,
-                UINT SyncInterval,
-                UINT Flags
-        ) -> HRESULT
+        swapChainPresent11Hook.apply(vtable[hDXGI::Present], [](IDXGISwapChain* chain,UINT SyncInterval,UINT Flags) -> HRESULT
         {
             static std::once_flag flag;
             std::call_once(flag, [&pChain = chain]()
