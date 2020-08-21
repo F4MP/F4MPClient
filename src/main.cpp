@@ -46,6 +46,7 @@ LRESULT CALLBACK hWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     ScreenToClient(window, &mPos);
     ImGui::GetIO().MousePos.x = mPos.x;
     ImGui::GetIO().MousePos.y = mPos.y;
+    ImGui::GetIO().MouseDrawCursor = g_ShowMenu;
 
     if (uMsg == WM_KEYUP)
     {
