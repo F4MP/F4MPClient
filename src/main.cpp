@@ -32,9 +32,6 @@ HWND window = nullptr;
 
 static WNDPROC OriginalWndProcHandler = nullptr;
 
-BOOL InitSciterEngineInstance(HWND hwnd, IDXGISwapChain* pSwapChain);
-
-
 using namespace F4MP::Core::Exceptions;
 
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
@@ -58,14 +55,6 @@ LRESULT CALLBACK hWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
     }
 
-    LOG("Initializing SciterProcND");
-    Sleep(5000);
-
-    if (uMsg != WM_CREATE && uMsg != WM_PAINT)
-    {
-        BOOL handled = FALSE;
-        LRESULT lr = SciterProcND(hWnd, uMsg, wParam, lParam, &handled);
-    }
 
     if (g_ShowMenu)
     {
@@ -82,15 +71,6 @@ DWORD WINAPI Main(LPVOID lpThreadParameter){
     AllocConsole();
     freopen_s((FILE**)stdout, "CONOUT$", "w", stdout);
     LOG("Console Loaded");
-
-    OleInitialize(nullptr);
-
-    // enable "unsafe" functions to be accessible from script
-    SciterSetOption(nullptr, SCITER_SET_SCRIPT_RUNTIME_FEATURES,
-                    ALLOW_FILE_IO |
-                    ALLOW_SOCKET_IO |
-                    ALLOW_EVAL |
-                    ALLOW_SYSINFO);
 
     try
     {
@@ -130,12 +110,6 @@ DWORD WINAPI Main(LPVOID lpThreadParameter){
                     ImGui_ImplDX11_Init(g_device, g_context);
                     ImGui::GetIO().ImeWindowHandle = window;
 
-                    LOG("Initializing Sciter Engine Instance");
-                    Sleep(5000);
-
-                    if(InitSciterEngineInstance(window, pSwapChain)){
-                        LOG("Sciter Engine initialized");
-                    }
 
                     ID3D11Texture2D* pBackBuffer;
 
@@ -160,9 +134,6 @@ DWORD WINAPI Main(LPVOID lpThreadParameter){
                 ImGui::ShowDemoWindow(&bShow);
             }
             ImGui::EndFrame();
-
-            SciterRenderOnDirectXWindow(window, NULL, FALSE);
-
 
             ImGui::Render();
 
@@ -195,46 +166,6 @@ DWORD WINAPI Main(LPVOID lpThreadParameter){
     return TRUE;
 }
 
-int gFPS = 60;
-
-
-struct view_dom_event_handler : public sciter::event_handler
-{
-BEGIN_FUNCTION_MAP
-    FUNCTION_0("FPS", FPS)
-END_FUNCTION_MAP
-
-sciter::value FPS()
-{
-    return sciter::value(gFPS);
-}
-};
-
-view_dom_event_handler g_ViewDomEventHandler;
-
-
-BOOL InitSciterEngineInstance(HWND hWnd, IDXGISwapChain *pSwapChain)
-{
-    // 1. create engine instance on the window with the swap chain:
-    BOOL r = SciterCreateOnDirectXWindow(hWnd, pSwapChain);
-    if (!r) return FALSE;
-
-    SciterSetOption(hWnd, SCITER_SET_DEBUG_MODE, TRUE);
-
-    // 2. setup callback (resource loading, etc):
-    //SciterSetCallback(hWnd, SciterCallback, NULL);
-    SciterSetCallback(hWnd,NULL,NULL);
-    // 2b. setup DOM event handler:
-    sciter::attach_dom_event_handler(hWnd, &g_ViewDomEventHandler);
-
-    // 3. load HTML content in it:
-    r = SciterLoadFile(hWnd, L"https://www.google.com/");
-
-    assert(r);
-
-    // done
-    return true;
-}
 
 BOOL WINAPI Detach(){
 
