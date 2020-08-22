@@ -17,14 +17,13 @@
 
 #include <d3d11.h>
 
-#include <sciter/sciter-x.h>
 
 static Hook<CallConvention::stdcall_t, HRESULT, IDXGISwapChain*, UINT, UINT> swapChainPresent11Hook;
 
-IDXGISwapChain *pSwapChain;
-ID3D11Device *g_device;
-ID3D11DeviceContext *g_context;
-ID3D11RenderTargetView *mainRenderTargetView;
+IDXGISwapChain *pSwapChain = nullptr;
+ID3D11Device *g_device = nullptr;
+ID3D11DeviceContext *g_context = nullptr;
+ID3D11RenderTargetView *mainRenderTargetView = nullptr;
 
 BOOL g_Initialized = false;
 BOOL g_ShowMenu = false;
@@ -58,7 +57,9 @@ LRESULT CALLBACK hWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
     if (g_ShowMenu)
     {
+        LOG("Imgui menu opened")
         ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam);
+
         return true;
     }
 
@@ -89,7 +90,7 @@ DWORD WINAPI Main(LPVOID lpThreadParameter){
 
                 pSwapChain = pChain;
 
-                LOG("SwapChain: 0x" + std::to_string((DWORD)pChain));
+                LOG("SwapChain: 0x" + std::to_string((DWORD)pSwapChain));
 
                 if (!g_Initialized && SUCCEEDED(pChain->GetDevice(__uuidof(ID3D11Device), (void **)&g_device))) {
                     pChain->GetDevice(__uuidof(g_device), (void**)&g_device);
@@ -144,9 +145,6 @@ DWORD WINAPI Main(LPVOID lpThreadParameter){
 
            return ret;
         });
-
-
-
     }
     catch (DetourException& ex)
     {

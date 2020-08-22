@@ -41,6 +41,8 @@ file(GLOB SourceFiles
 	${SrcDIR}/imgui/*
 )
 
+#target_link_libraries(main PRIVATE spdlog::spdlog spdlog::spdlog_header_only)
+
 #add_executable(${executable} ${SourceFiles})
 add_library(${executable} SHARED ${SourceFiles})
 
@@ -66,6 +68,7 @@ target_link_libraries(${executable}
 	${CMAKE_SOURCE_DIR}/lib/RakNetDll.lib
 	${CMAKE_SOURCE_DIR}/lib/steam_api64.lib
 	${CMAKE_SOURCE_DIR}/lib/detours.lib
-	${CMAKE_SOURCE_DIR}/lib/d3d11.lib
+	d3d11.lib
 	dxgi.dll
+
 )
