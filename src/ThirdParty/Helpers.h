@@ -23,9 +23,4 @@ void _Log(std::string msg){
 #define LOG(msg) _Log(msg);
 #define LOGERR(msg) _Error(msg);
 
-#define INVOKE_D3D11_CALLBACK(_engine_, _callback_, ...)     \
-                             (_engine_->EventsD3D11._callback_ ? \
-                             _engine_->EventsD3D11._callback_(##__VA_ARGS__) : \
-                             (void)0)
-
 #endif //F4MPCLIENT_HELPERS_H

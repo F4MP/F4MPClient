@@ -9,10 +9,13 @@
 
 using namespace F4MP::Core::Exceptions;
 
+//
+//
+//
 hDirect3D11::Direct3D11::Direct3D11() :
         pd3dDevice(nullptr), pd3dDeviceContext(nullptr), pSwapChain(nullptr)
 {
-    temp_window = std::make_unique<Window>("TempDirect3D11OverlayWindow");
+    temp_window = std::make_unique<Window>("TempDirect3DOverlay");
 
     const auto hModDXGI = GetModuleHandle("DXGI.dll");
     const auto hModD3D11 = GetModuleHandle("D3D11.dll");
@@ -26,6 +29,7 @@ hDirect3D11::Direct3D11::Direct3D11() :
     {
         throw ModuleNotFoundException("Could not get handle to D3D11.dll");
     }
+
 
     // Setup swap chain
     DXGI_SWAP_CHAIN_DESC sd;

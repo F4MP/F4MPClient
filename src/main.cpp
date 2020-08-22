@@ -99,13 +99,12 @@ DWORD WINAPI Main(LPVOID lpThreadParameter){
 
                     DXGI_SWAP_CHAIN_DESC sd;
                     pChain->GetDesc(&sd);
+                    window = sd.OutputWindow;
+                    OriginalWndProcHandler = (WNDPROC)SetWindowLongPtr(window, GWLP_WNDPROC, (LONG_PTR)hWndProc);
 
                     ImGui::CreateContext();
                     ImGuiIO& io = ImGui::GetIO(); (void)io;
                     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
-                    window = sd.OutputWindow;
-
-                    OriginalWndProcHandler = (WNDPROC)SetWindowLongPtr(window, GWLP_WNDPROC, (LONG_PTR)hWndProc);
 
                     ImGui_ImplWin32_Init(window);
                     ImGui_ImplDX11_Init(g_device, g_context);
