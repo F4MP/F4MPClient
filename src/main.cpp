@@ -6,8 +6,8 @@
 #include <steam/steam_api.h>
 
 #include "Hooks/Direct3D11.h"
-#include "ThirdParty/Hook.h"
-#include "ThirdParty/Helpers.h"
+#include "Utils/Hook.h"
+#include "Utils/Helpers.h"
 
 #include <mutex>
 
@@ -16,7 +16,6 @@
 #include "imgui/imgui_impl_win32.h"
 
 #include <d3d11.h>
-
 
 static Hook<CallConvention::stdcall_t, HRESULT, IDXGISwapChain*, UINT, UINT> swapChainPresent11Hook;
 
