@@ -68,6 +68,7 @@ target_link_libraries(${executable}
 	${CMAKE_SOURCE_DIR}/lib/RakNetDll.lib
 	${CMAKE_SOURCE_DIR}/lib/steam_api64.lib
 	${CMAKE_SOURCE_DIR}/lib/detours.lib
+	${CMAKE_SOURCE_DIR}}/lib/spdlog.lib
 	d3d11.lib
 	dxgi.dll
 
