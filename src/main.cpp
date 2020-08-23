@@ -15,7 +15,9 @@
 #include "imgui/imgui_impl_win32.h"
 //spdlog
 #include <spdlog/spdlog.h>
-#include "spdlog/sinks/basic_file_sink.h"
+#include <spdlog/sinks/basic_file_sink.h>
+#include <spdlog/sinks/stdout_color_sinks.h>
+#include <spdlog/async.h>
 
 static Hook<CallConvention::stdcall_t, HRESULT, IDXGISwapChain*, UINT, UINT> swapChainPresent11Hook;
 
@@ -64,15 +66,17 @@ LRESULT CALLBACK hWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 }
 
 DWORD WINAPI Main(LPVOID lpThreadParameter){
-
-
+    //LOGGING
     AllocConsole();
     freopen_s((FILE**)stdout, "CONOUT$", "w", stdout);
+    auto console = spdlog::stdout_color_mt("console");
+    auto async_file = spdlog::basic_logger_mt<spdlog::async_factory>("f4mp_logger", "logs/f4mp.txt");
 
-    auto file_logger = spdlog::basic_logger_mt("basic_logger", "logs/basic.txt");
-    spdlog::set_default_logger(file_logger);
+    spdlog::set_default_logger(async_file);
 
-    spdlog::info("F4MP Console Loaded");
+    spdlog::get("console")->info("F4MP Console Loaded");
+    //
+
 
     try
     {
