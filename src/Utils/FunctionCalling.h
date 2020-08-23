@@ -48,7 +48,7 @@ namespace Memory {
 }
 
 //
-//MemoryUtil::AddressCall<MemoryUtil::CallConvention::ThisCall, void, Memory::CRxScreen*,int>(ChangeScreenModeAddress, game->RxScreen, game->RxScreen->is_full_screen == 0);
+//Memory::AddressCall<Memory::CallConvention::ThisCall, return_type, parameters_type>(address, parameters);
 //
 
 #endif //F4MPCLIENT_FUNCTIONCALLING_H
