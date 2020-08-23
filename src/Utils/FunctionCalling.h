@@ -35,6 +35,10 @@ namespace Memory {
         }();
     };
 
+
+    ///
+    ///Memory::AddressCall<Memory::CallConvention::ThisCall, return_type, parameters_type>(address, parameters);
+    ///
     template<CallConvention C, typename R, typename... ARGS>
     R AddressCall(uintptr_t address, ARGS... args) {
         using CALLABLE = decltype(BuildCallable<C, R, ARGS...>::value);
@@ -47,8 +51,5 @@ namespace Memory {
 
 }
 
-//
-//Memory::AddressCall<Memory::CallConvention::ThisCall, return_type, parameters_type>(address, parameters);
-//
 
 #endif //F4MPCLIENT_FUNCTIONCALLING_H

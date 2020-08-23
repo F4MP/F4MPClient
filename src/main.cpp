@@ -19,6 +19,8 @@
 #include <spdlog/sinks/stdout_color_sinks.h>
 #include <spdlog/async.h>
 
+#include "Utils/FunctionCalling.h"
+
 static Hook<CallConvention::stdcall_t, HRESULT, IDXGISwapChain*, UINT, UINT> swapChainPresent11Hook;
 
 IDXGISwapChain *pSwapChain = nullptr;
@@ -76,6 +78,7 @@ DWORD WINAPI Main(LPVOID lpThreadParameter){
 
     spdlog::get("console")->info("F4MP Console Loaded");
     //
+
 
 
     try
