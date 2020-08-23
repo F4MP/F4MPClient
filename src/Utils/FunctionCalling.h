@@ -35,7 +35,6 @@ namespace Memory {
         }();
     };
 
-
     ///
     ///Memory::AddressCall<Memory::CallConvention::ThisCall, return_type, parameters_type>(address, parameters);
     ///

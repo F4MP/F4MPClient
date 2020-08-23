@@ -26,8 +26,8 @@ namespace Hooks {
         //DEF
         void Init();
         void Render();
+        void Pre_Render(IDXGISwapChain* swapChain);
         void Imgui_Render_Impl();
-
 
         //IMPL
         extern LRESULT CALLBACK hWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
@@ -77,29 +77,7 @@ namespace Hooks {
                         g_d3d11SwapChain = pChain;
 
                         if (!g_Initialized && SUCCEEDED(pChain->GetDevice(__uuidof(ID3D11Device), (void **)&g_d3d11Device))) {
-                            pChain->GetDevice(__uuidof(g_d3d11Device), (void**)&g_d3d11Device);
-
-                            g_d3d11Device->GetImmediateContext(&g_d3d11Context);
-
-                            DXGI_SWAP_CHAIN_DESC sd;
-                            pChain->GetDesc(&sd);
-                            g_windowHandle = sd.OutputWindow;
-                            OriginalWndProcHandler = (WNDPROC)SetWindowLongPtr(g_windowHandle, GWLP_WNDPROC, (LONG_PTR)hWndProc);
-
-                            ImGui::CreateContext();
-                            ImGuiIO& io = ImGui::GetIO(); (void)io;
-                            io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
-
-                            ImGui_ImplWin32_Init(g_windowHandle);
-                            ImGui_ImplDX11_Init(g_d3d11Device, g_d3d11Context);
-                            ImGui::GetIO().ImeWindowHandle = g_windowHandle;
-
-
-                            ID3D11Texture2D* pBackBuffer;
-
-                            pChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);
-                            g_d3d11Device->CreateRenderTargetView(pBackBuffer, NULL, &g_mainRenderTargetView);
-                            pBackBuffer->Release();
+                            Pre_Render(pChain);
 
                             g_Initialized = true;
 
@@ -128,7 +106,30 @@ namespace Hooks {
             }
         }
 
-        void Render_Init(){
+        void Pre_Render(IDXGISwapChain* swapChain){
+            swapChain->GetDevice(__uuidof(g_d3d11Device), (void**)&g_d3d11Device);
+
+            g_d3d11Device->GetImmediateContext(&g_d3d11Context);
+
+            DXGI_SWAP_CHAIN_DESC sd;
+            swapChain->GetDesc(&sd);
+            g_windowHandle = sd.OutputWindow;
+            OriginalWndProcHandler = (WNDPROC)SetWindowLongPtr(g_windowHandle, GWLP_WNDPROC, (LONG_PTR)hWndProc);
+
+            ImGui::CreateContext();
+            ImGuiIO& io = ImGui::GetIO(); (void)io;
+            io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+
+            ImGui_ImplWin32_Init(g_windowHandle);
+            ImGui_ImplDX11_Init(g_d3d11Device, g_d3d11Context);
+            ImGui::GetIO().ImeWindowHandle = g_windowHandle;
+
+
+            ID3D11Texture2D* pBackBuffer;
+
+            swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);
+            g_d3d11Device->CreateRenderTargetView(pBackBuffer, NULL, &g_mainRenderTargetView);
+            pBackBuffer->Release();
 
         }
 
