@@ -36,6 +36,7 @@ include_directories(${executable}
 
 file(GLOB SourceFiles 
 	${SrcDIR}/*
+	${SrcDIR}/Utils/*
 	${SrcDIR}/ThirdParty/*
 	${SrcDIR}/Hooks/*
 	${SrcDIR}/imgui/*
