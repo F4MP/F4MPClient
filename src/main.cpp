@@ -1,10 +1,4 @@
-#include <windows.h>
-#include <iostream>
-#include <assert.h>
-#include <string>
-#include <thread>
-#include <mutex>
-#include <d3d11.h>
+#include "Global.h"
 //hooks
 #include "Hooks/Direct3D11.h"
 #include "Hooks/DXGI.h"
@@ -21,16 +15,12 @@
 
 #include "Utils/FunctionCalling.h"
 
+
 static Hook<CallConvention::stdcall_t, HRESULT, IDXGISwapChain*, UINT, UINT> swapChainPresent11Hook;
 
-IDXGISwapChain *pSwapChain = nullptr;
-ID3D11Device *g_device = nullptr;
-ID3D11DeviceContext *g_context = nullptr;
-ID3D11RenderTargetView *mainRenderTargetView = nullptr;
 
 BOOL g_Initialized = false;
 BOOL g_ShowMenu = false;
-HWND window = nullptr;
 
 static WNDPROC OriginalWndProcHandler = nullptr;
 
@@ -43,7 +33,7 @@ LRESULT CALLBACK hWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     ImGuiIO& io = ImGui::GetIO();
     POINT mPos;
     GetCursorPos(&mPos);
-    ScreenToClient(window, &mPos);
+    ScreenToClient(g_windowHandle, &mPos);
     ImGui::GetIO().MousePos.x = mPos.x;
     ImGui::GetIO().MousePos.y = mPos.y;
     ImGui::GetIO().MouseDrawCursor = g_ShowMenu;
@@ -95,31 +85,31 @@ DWORD WINAPI Main(LPVOID lpThreadParameter){
             std::call_once(flag, [&pChain = chain]()
             {
                 spdlog::info("[+H] IDXGISwapChain::Present called");
-                pSwapChain = pChain;
+                g_d3d11SwapChain = pChain;
 
-                if (!g_Initialized && SUCCEEDED(pChain->GetDevice(__uuidof(ID3D11Device), (void **)&g_device))) {
-                    pChain->GetDevice(__uuidof(g_device), (void**)&g_device);
+                if (!g_Initialized && SUCCEEDED(pChain->GetDevice(__uuidof(ID3D11Device), (void **)&g_d3d11Device))) {
+                    pChain->GetDevice(__uuidof(g_d3d11Device), (void**)&g_d3d11Device);
 
-                    g_device->GetImmediateContext(&g_context);
+                    g_d3d11Device->GetImmediateContext(&g_d3d11Context);
 
                     DXGI_SWAP_CHAIN_DESC sd;
                     pChain->GetDesc(&sd);
-                    window = sd.OutputWindow;
-                    OriginalWndProcHandler = (WNDPROC)SetWindowLongPtr(window, GWLP_WNDPROC, (LONG_PTR)hWndProc);
+                    g_windowHandle = sd.OutputWindow;
+                    OriginalWndProcHandler = (WNDPROC)SetWindowLongPtr(g_windowHandle, GWLP_WNDPROC, (LONG_PTR)hWndProc);
 
                     ImGui::CreateContext();
                     ImGuiIO& io = ImGui::GetIO(); (void)io;
                     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
 
-                    ImGui_ImplWin32_Init(window);
-                    ImGui_ImplDX11_Init(g_device, g_context);
-                    ImGui::GetIO().ImeWindowHandle = window;
+                    ImGui_ImplWin32_Init(g_windowHandle);
+                    ImGui_ImplDX11_Init(g_d3d11Device, g_d3d11Context);
+                    ImGui::GetIO().ImeWindowHandle = g_windowHandle;
 
 
                     ID3D11Texture2D* pBackBuffer;
 
                     pChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&pBackBuffer);
-                    g_device->CreateRenderTargetView(pBackBuffer, NULL, &mainRenderTargetView);
+                    g_d3d11Device->CreateRenderTargetView(pBackBuffer, NULL, &g_mainRenderTargetView);
                     pBackBuffer->Release();
 
                     g_Initialized = true;
@@ -142,7 +132,7 @@ DWORD WINAPI Main(LPVOID lpThreadParameter){
 
             ImGui::Render();
 
-            g_context->OMSetRenderTargets(1, &mainRenderTargetView, NULL);
+            g_d3d11Context->OMSetRenderTargets(1, &g_mainRenderTargetView, NULL);
             ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
 
            const auto ret = swapChainPresent11Hook.call_orig(chain, SyncInterval, Flags);
