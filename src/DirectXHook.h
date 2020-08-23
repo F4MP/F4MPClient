@@ -23,10 +23,13 @@ extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam
 
 namespace Hooks {
     namespace DirectX {
-
+        //DEF
         void Init();
         void Render();
+        void Imgui_Render_Impl();
 
+
+        //IMPL
         extern LRESULT CALLBACK hWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
         {
             ImGuiIO& io = ImGui::GetIO();
@@ -130,6 +133,12 @@ namespace Hooks {
         }
 
         void Render(){
+           Imgui_Render_Impl();
+
+
+        }
+
+        void Imgui_Render_Impl(){
             ImGui_ImplWin32_NewFrame();
             ImGui_ImplDX11_NewFrame();
 
