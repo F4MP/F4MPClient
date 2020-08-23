@@ -3,19 +3,19 @@
 #include <assert.h>
 #include <string>
 #include <thread>
-#include <steam/steam_api.h>
-
-#include "Hooks/Direct3D11.h"
-#include "Utils/Hook.h"
-#include "Utils/Helpers.h"
-
 #include <mutex>
-
+#include <d3d11.h>
+//hooks
+#include "Hooks/Direct3D11.h"
+#include "Hooks/DXGI.h"
+#include "Utils/Hook.h"
+//imgui
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_dx11.h"
 #include "imgui/imgui_impl_win32.h"
-
-#include <d3d11.h>
+//spdlog
+#include <spdlog/spdlog.h>
+#include "spdlog/sinks/basic_file_sink.h"
 
 static Hook<CallConvention::stdcall_t, HRESULT, IDXGISwapChain*, UINT, UINT> swapChainPresent11Hook;
 
@@ -56,9 +56,7 @@ LRESULT CALLBACK hWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
     if (g_ShowMenu)
     {
-        LOG("Imgui menu opened")
         ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam);
-
         return true;
     }
 
@@ -70,7 +68,11 @@ DWORD WINAPI Main(LPVOID lpThreadParameter){
 
     AllocConsole();
     freopen_s((FILE**)stdout, "CONOUT$", "w", stdout);
-    LOG("Console Loaded");
+
+    auto file_logger = spdlog::basic_logger_mt("basic_logger", "logs/basic.txt");
+    spdlog::set_default_logger(file_logger);
+
+    spdlog::info("F4MP Console Loaded");
 
     try
     {
@@ -78,18 +80,15 @@ DWORD WINAPI Main(LPVOID lpThreadParameter){
         auto vtable = d3d11->vtable();
         
 
-        LOG("Hooking IDXGISwapChain::Present");
+        spdlog::info("[H] IDXGISwapChain::Present");
 
         swapChainPresent11Hook.apply(vtable[hDXGI::Present], [](IDXGISwapChain* chain,UINT SyncInterval,UINT Flags) -> HRESULT
         {
             static std::once_flag flag;
             std::call_once(flag, [&pChain = chain]()
             {
-                LOG("++ IDXGISwapChain::Present called");
-
+                spdlog::info("[+H] IDXGISwapChain::Present called");
                 pSwapChain = pChain;
-
-                LOG("SwapChain: 0x" + std::to_string((DWORD)pSwapChain));
 
                 if (!g_Initialized && SUCCEEDED(pChain->GetDevice(__uuidof(ID3D11Device), (void **)&g_device))) {
                     pChain->GetDevice(__uuidof(g_device), (void**)&g_device);
@@ -146,15 +145,15 @@ DWORD WINAPI Main(LPVOID lpThreadParameter){
     }
     catch (DetourException& ex)
     {
-        LOGERR("Hooking D3D11 failed: " + std::string(ex.what()));
+        spdlog::error("Hooking D3D11 failed: {}",ex.what());
     }
     catch (ModuleNotFoundException& ex)
     {
-        LOGERR("Module not found: " + std::string(ex.what()));
+        spdlog::error("Module not found: {}",ex.what());
     }
     catch (RuntimeException& ex)
     {
-        LOGERR("D3D11 runtime error: " + std::string(ex.what()));
+        spdlog::error("D3D11 runtime error: {}",ex.what());
     }
 
 
