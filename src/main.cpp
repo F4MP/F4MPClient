@@ -18,8 +18,6 @@
 
 static Hook<CallConvention::stdcall_t, HRESULT, IDXGISwapChain*, UINT, UINT> swapChainPresent11Hook;
 
-
-BOOL g_Initialized = false;
 BOOL g_ShowMenu = false;
 
 static WNDPROC OriginalWndProcHandler = nullptr;
