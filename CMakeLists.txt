@@ -49,10 +49,9 @@ set_target_properties(${executable} PROPERTIES
 	CXX_EXTENSIONS ON
 )
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
-
 if (UNIX)
 	target_link_libraries(${executable}
+		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
 	)
 endif (UNIX)
 
