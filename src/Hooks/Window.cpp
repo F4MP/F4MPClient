@@ -6,9 +6,9 @@
 
 #include "Window.h"
 #include <utility>
-#include "../Exceptions.h"
+#include <F4MPReverse/Exceptions.h>
 
-using namespace F4MP::Core::Exceptions;
+using namespace Exceptions::Core::Exceptions;
 
 Window::Window(std::string windowClassName) : temp_window(nullptr), window_class_name(std::move(windowClassName))
 {

@@ -2858,7 +2858,7 @@ class format_int {
   mutable char buffer_[buffer_size];
   char* str_;
 
-  // Formats value in reverse and returns a pointer to the beginning.
+  // Formats value in F4MPReverse and returns a pointer to the beginning.
   char* format_decimal(unsigned long long value) {
     char* ptr = buffer_ + (buffer_size - 1);  // Parens to workaround MSVC bug.
     while (value >= 100) {

@@ -2,21 +2,20 @@
 #define F4MPCLIENT_DIRECTXHOOK_H
 
 #include "Global.h"
-
+#include <F4MPReverse/Hook.h>
 //hooks
 #include "Hooks/Direct3D11.h"
 #include "Hooks/DXGI.h"
-#include "Utils/Hook.h"
 //imgui
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_dx11.h"
 #include "imgui/imgui_impl_win32.h"
 
-using namespace F4MP::Core::Exceptions;
+using namespace Exceptions::Core::Exceptions;
+using namespace Hooks;
 
 static Hook<CallConvention::stdcall_t, HRESULT, IDXGISwapChain*, UINT, UINT> swapChainPresent11Hook;
 static WNDPROC OriginalWndProcHandler = nullptr;
-using namespace F4MP::Core::Exceptions;
 
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 

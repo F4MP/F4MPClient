@@ -1,15 +1,10 @@
-//
-// Created by again on 8/21/2020.
-//
-
-#ifndef F4MPCLIENT_EXCEPTIONS_H
-#define F4MPCLIENT_EXCEPTIONS_H
-
+#ifndef F4MPREVERSE_EXCEPTIONS_H
+#define F4MPREVERSE_EXCEPTIONS_H
 
 #include <Windows.h>
 #include <stdexcept>
 
-namespace F4MP {
+namespace Exceptions {
 
     namespace Core {
 
@@ -128,5 +123,4 @@ namespace F4MP {
     };
 
 };
-
-#endif //F4MPCLIENT_EXCEPTIONS_H
+#endif

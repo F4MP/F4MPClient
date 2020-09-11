@@ -5,13 +5,10 @@
 #include "Direct3D11.h"
 #include "DXGI.h"
 #include <iostream>
-#include "../Exceptions.h"
+#include <F4MPReverse/Exceptions.h>
 
-using namespace F4MP::Core::Exceptions;
+using namespace Exceptions::Core::Exceptions;
 
-//
-//
-//
 hDirect3D11::Direct3D11::Direct3D11() :
         pd3dDevice(nullptr), pd3dDeviceContext(nullptr), pSwapChain(nullptr)
 {
