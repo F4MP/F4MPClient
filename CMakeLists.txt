@@ -11,10 +11,6 @@ set(IncludeDIR ./include)
 add_definitions(-D_RESOURCES="${CMAKE_SOURCE_DIR}/resources/")
 message(${CMAKE_SOURCE_DIR}/resources)
 
-if (UNIX)
-	# set(CMAKE_BUILD_TYPE Debug)
-	# set(CMAKE_CXX_FLAGS "-Ofast")
-endif(UNIX)
 
 if (WIN32)
 	# set(CMAKE_CXX_FLAGS "/Ox")
@@ -24,11 +20,6 @@ endif (WIN32)
 
 set(THREADS_PREFER_PTHREAD_FLAD ON)
 find_package(Threads REQUIRED)
-
-if (UNIX)
-	include_directories(${executable}
-	)
-endif (UNIX)
 
 include_directories(${executable}
 	${IncludeDIR}
@@ -49,11 +40,6 @@ set_target_properties(${executable} PROPERTIES
 	CXX_EXTENSIONS ON
 )
 
-if (UNIX)
-	target_link_libraries(${executable}
-		set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
-	)
-endif (UNIX)
 
 if (WIN32)
 	target_link_libraries(${executable}
