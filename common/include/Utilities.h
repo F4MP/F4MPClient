@@ -1,5 +1,5 @@
-#ifndef F4MPREVERSE_UTILITIES_H
-#define F4MPREVERSE_UTILITIES_H
+#ifndef COMMON_UTILITIES_H
+#define COMMON_UTILITIES_H
 
 #include <Windows.h>
 #include <iostream>

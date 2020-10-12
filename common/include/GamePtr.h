@@ -1,5 +1,5 @@
-#ifndef F4MPREVERSE_GAMEPTR_H
-#define F4MPREVERSE_GAMEPTR_H
+#ifndef COMMON_GAMEPTR_H
+#define COMMON_GAMEPTR_H
 
 #include <Windows.h>
 #include <utility>

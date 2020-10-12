@@ -1,6 +1,6 @@
 
-#ifndef F4MPREVERSE_TYPES_H
-#define F4MPREVERSE_TYPES_H
+#ifndef COMMON_TYPES_H
+#define COMMON_TYPES_H
 
     namespace Types {
         typedef unsigned char		UInt8;		//!< An unsigned 8-bit integer value

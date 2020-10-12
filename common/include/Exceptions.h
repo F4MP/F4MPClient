@@ -1,5 +1,5 @@
-#ifndef F4MPREVERSE_EXCEPTIONS_H
-#define F4MPREVERSE_EXCEPTIONS_H
+#ifndef COMMON_EXCEPTIONS_H
+#define COMMON_EXCEPTIONS_H
 
 #include <Windows.h>
 #include <stdexcept>

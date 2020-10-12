@@ -1,5 +1,5 @@
-#ifndef F4MPREVERSE_HOOK_H
-#define F4MPREVERSE_HOOK_H
+#ifndef COMMON_HOOK_H
+#define COMMON_HOOK_H
 
 #include <Windows.h>
 #include <cstdint>
