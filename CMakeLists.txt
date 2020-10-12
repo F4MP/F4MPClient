@@ -33,6 +33,8 @@ file(GLOB SourceFiles
 	${SrcDIR}/imgui/*
 )
 
+add_subdirectory(Common)
+
 add_library(${executable} SHARED ${SourceFiles})
 
 set_target_properties(${executable} PROPERTIES
