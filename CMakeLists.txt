@@ -42,19 +42,12 @@ set_target_properties(${executable} PROPERTIES
 	CXX_EXTENSIONS ON
 )
 
-
-if (WIN32)
-	target_link_libraries(${executable}
-	)
-endif (WIN32)
-
 target_link_libraries(${executable}
 	${CMAKE_DL_LIBS}
 	${CMAKE_SOURCE_DIR}/lib/steam_api64.lib
 	${CMAKE_SOURCE_DIR}/lib/detours.lib
 	${CMAKE_SOURCE_DIR}/lib/spdlogd.lib
 	${CMAKE_SOURCE_DIR}/lib/GameNetworkingSockets_s.lib
-	${CMAKE_SOURCE_DIR}/lib/F4MPReverse.lib
 	Common
 	d3d11.lib
 	dxgi.dll
