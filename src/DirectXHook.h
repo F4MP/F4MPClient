@@ -2,7 +2,7 @@
 #define F4MPCLIENT_DIRECTXHOOK_H
 
 #include "Global.h"
-#include <F4MPReverse/Hook.h>
+#include <common/include/Hook.h>
 //hooks
 #include "Hooks/Direct3D11.h"
 #include "Hooks/DXGI.h"

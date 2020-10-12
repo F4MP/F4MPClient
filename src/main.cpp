@@ -3,10 +3,10 @@
 
 #include "DirectXHook.h"
 
-#include <F4MPReverse/GamePtr.h>
-#include <F4MPReverse/Utilities.h>
-#include <F4MPReverse/Types.h>
-#include <F4MPReverse/Hook.h>
+#include <common/include/GamePtr.h>
+#include <common/include/Utilities.h>
+#include <common/include/Types.h>
+#include <common/include/Hook.h>
 
 
 static Hooks::Hook<Hooks::CallConvention::cdecl_t, void,const char *, va_list> printHook;

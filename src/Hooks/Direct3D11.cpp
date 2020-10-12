@@ -5,7 +5,7 @@
 #include "Direct3D11.h"
 #include "DXGI.h"
 #include <iostream>
-#include <F4MPReverse/Exceptions.h>
+#include <common/include/Exceptions.h>
 
 using namespace Exceptions::Core::Exceptions;
 

@@ -11,18 +11,12 @@ set(IncludeDIR ./include)
 add_definitions(-D_RESOURCES="${CMAKE_SOURCE_DIR}/resources/")
 message(${CMAKE_SOURCE_DIR}/resources)
 
-
-if (WIN32)
-	# set(CMAKE_CXX_FLAGS "/Ox")
-	include_directories(${executable}
-	)
-endif (WIN32)
-
 set(THREADS_PREFER_PTHREAD_FLAD ON)
 find_package(Threads REQUIRED)
 
 include_directories(${executable}
 	${IncludeDIR}
+	${CMAKE_CURRENT_SOURCE_DIR}
 )
 
 file(GLOB SourceFiles 
