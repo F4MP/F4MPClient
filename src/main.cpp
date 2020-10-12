@@ -1,6 +1,5 @@
 #include "Global.h"
 
-#include "Utils/FunctionCalling.h"
 
 #include "DirectXHook.h"
 
