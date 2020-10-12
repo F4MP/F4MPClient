@@ -55,6 +55,7 @@ target_link_libraries(${executable}
 	${CMAKE_SOURCE_DIR}/lib/spdlogd.lib
 	${CMAKE_SOURCE_DIR}/lib/GameNetworkingSockets_s.lib
 	${CMAKE_SOURCE_DIR}/lib/F4MPReverse.lib
+	Common
 	d3d11.lib
 	dxgi.dll
 )

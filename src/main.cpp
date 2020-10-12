@@ -8,6 +8,7 @@
 #include <F4MPReverse/Types.h>
 #include <F4MPReverse/Hook.h>
 
+
 static Hooks::Hook<Hooks::CallConvention::cdecl_t, void,const char *, va_list> printHook;
 static Memory::GameAddr <void> printAddr(0x01262EC0);
 
