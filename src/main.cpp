@@ -22,7 +22,6 @@ public:
 //00007FF6D7E30AE0
 static Memory::GamePtr<ConsoleManager *>g_console(0x058E0AE0);
 static Memory::GameAddr<Types::UInt32*> g_consoleHandle(0x05ADB4A8);
-static Memory::GameFunc<void(const char*, va_list), 0x01262EC0> TestPrint;
 
 void Console_Print(const char * fmt, ...)
 {
@@ -44,7 +43,6 @@ void testPrint(const char * fmt, ...){
 
         va_start(args,fmt);
 
-        TestPrint(fmt,args);
 
         va_end(args);
 }

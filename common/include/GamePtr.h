@@ -14,10 +14,6 @@ namespace Memory {
         static uintptr_t	s_baseAddress;
     };
 
-    uintptr_t translateAddr(uintptr_t offset){
-        return offset + Memory::GamePtr_Manager::s_baseAddress;
-    }
-
     template <typename T>
     class GamePtr {
     public :
@@ -79,16 +75,7 @@ namespace Memory {
         GameAddr & operator=(GameAddr & rhs);
     };
 
-    template <typename T, uintptr_t Addr>
-    class GameFunc{
-    public:
 
-        template <class ...Args>
-        auto operator()(Args ... args){
-            T * f = (T*)translateAddr(Addr);
-            return f(std::forward<Args>(args)...);
-        }
-    };
 }
 
 #endif
