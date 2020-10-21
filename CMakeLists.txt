@@ -8,8 +8,8 @@ set(SRC_DIR ./src)
 set(INCLUDE_DIR ./include)
 
 # Setting resource path
-add_definitions(-D_RESOURCES="${CMAKE_SOURCE_DIR}/resources/")
-message(${CMAKE_SOURCE_DIR}/resources)
+add_definitions(-D_RESOURCES="${CMAKE_CURRENT_SOURCE_DIR}/resources/")
+message(${CMAKE_CURRENT_SOURCE_DIR}/resources)
 
 set(THREADS_PREFER_PTHREAD_FLAD ON)
 find_package(Threads REQUIRED)
@@ -38,10 +38,10 @@ set_target_properties(${EXECUTABLE} PROPERTIES
 
 target_link_libraries(${EXECUTABLE}
 	${CMAKE_DL_LIBS}
-	${CMAKE_SOURCE_DIR}/lib/steam_api64.lib
-	${CMAKE_SOURCE_DIR}/lib/detours.lib
-	${CMAKE_SOURCE_DIR}/lib/spdlogd.lib
-	${CMAKE_SOURCE_DIR}/lib/GameNetworkingSockets_s.lib
+	${CMAKE_CURRENT_SOURCE_DIR}/lib/steam_api64.lib
+	${CMAKE_CURRENT_SOURCE_DIR}/lib/detours.lib
+	${CMAKE_CURRENT_SOURCE_DIR}/lib/spdlogd.lib
+	${CMAKE_CURRENT_SOURCE_DIR}/lib/GameNetworkingSockets_s.lib
 	Common
 	d3d11.lib
 	dxgi.dll
