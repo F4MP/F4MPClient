@@ -16,6 +16,7 @@
 #include <spdlog/sinks/stdout_color_sinks.h>
 #include <spdlog/async.h>
 
+
 IDXGISwapChain *g_d3d11SwapChain = nullptr;
 ID3D11Device *g_d3d11Device = nullptr;
 ID3D11DeviceContext *g_d3d11Context = nullptr;

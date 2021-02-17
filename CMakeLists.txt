@@ -14,6 +14,7 @@ set(THREADS_PREFER_PTHREAD_FLAD ON)
 find_package(Threads REQUIRED)
 
 add_subdirectory (libs/imgui)
+add_subdirectory(libs/spdlog)
 
 include_directories(${EXECUTABLE}
 	${INCLUDE_DIR}
@@ -40,10 +41,10 @@ target_link_libraries(${EXECUTABLE}
 	${CMAKE_DL_LIBS}
 	${CMAKE_CURRENT_SOURCE_DIR}/lib/steam_api64.lib
 	${CMAKE_CURRENT_SOURCE_DIR}/lib/detours.lib
-	${CMAKE_CURRENT_SOURCE_DIR}/lib/spdlogd.lib
 	${CMAKE_CURRENT_SOURCE_DIR}/lib/GameNetworkingSockets_s.lib
 	Common
 	d3d11.lib
 	dxgi.dll
-	f4mp::imgui
+	imgui
+	spdlog::spdlog_header_only
 )
