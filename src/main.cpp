@@ -1,6 +1,4 @@
 #include "Global.h"
-
-
 #include "DirectXHook.h"
 
 #include <common/include/GamePtr.h>
@@ -8,44 +6,7 @@
 #include <common/include/Types.h>
 #include <common/include/Hook.h>
 
-
-static Hooks::Hook<Hooks::CallConvention::cdecl_t, void,const char *, va_list> printHook;
-static Memory::GameAddr <void> printAddr(0x01262EC0);
-
-class ConsoleManager
-{
-public:
-    MEMBER_FN_PREFIX(ConsoleManager);
-    DEFINE_MEMBER_FN(VPrint, void, 0x01262EC0, const char * fmt, va_list args);
-    DEFINE_MEMBER_FN(Print, void, 0x01262F50, const char * str);
-};
-//00007FF6D7E30AE0
-static Memory::GamePtr<ConsoleManager *>g_console(0x058E0AE0);
-static Memory::GameAddr<Types::UInt32*> g_consoleHandle(0x05ADB4A8);
-
-void Console_Print(const char * fmt, ...)
-{
-    ConsoleManager * mgr = *g_console;
-    if(mgr)
-    {
-        va_list args;
-                va_start(args, fmt);
-
-        CALL_MEMBER_FN(mgr, VPrint)(fmt, args);
-
-                va_end(args);
-    }
-}
-
-
-void testPrint(const char * fmt, ...){
-        va_list args;
-
-        va_start(args,fmt);
-
-
-        va_end(args);
-}
+#include "Game.h"
 
 DWORD WINAPI Main(LPVOID lpThreadParameter){
     //LOGGING
@@ -61,18 +22,7 @@ DWORD WINAPI Main(LPVOID lpThreadParameter){
 
     Hooks::DirectX::Init();
 
-    printHook.apply(printAddr.GetUIntPtr(), [](const char * fmt, va_list args) -> void {
-            std::cout << fmt << args << std::endl;
-            return printHook.call_orig(fmt, args);
-    });
 
-    testPrint("Calling print with my own class");
-
-    Console_Print("TEST PRINT 1");
-
-    Console_Print("TEST PRINT 2");
-
-    testPrint("CALLED AGAIN");
 
     return TRUE;
 }

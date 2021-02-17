@@ -7,7 +7,6 @@ set(EXECUTABLE F4MPClient)
 set(SRC_DIR ./src)
 set(INCLUDE_DIR ./include)
 
-# Setting resource path
 add_definitions(-D_RESOURCES="${CMAKE_CURRENT_SOURCE_DIR}/resources/")
 message(${CMAKE_CURRENT_SOURCE_DIR}/resources)
 
@@ -32,7 +31,7 @@ add_subdirectory(Common)
 add_library(${EXECUTABLE} SHARED ${SourceFiles})
 
 set_target_properties(${EXECUTABLE} PROPERTIES
-	CXX_STANDARD 17
+	CXX_STANDARD 20
 	CXX_EXTENSIONS ON
 )
 
