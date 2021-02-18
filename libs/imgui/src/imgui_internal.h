@@ -175,7 +175,7 @@ static inline ImVec4 operator*(const ImVec4& lhs, const ImVec4& rhs)            
 #endif
 
 // Helpers: Maths
-// - Wrapper for standard libs functions. (Note that imgui_demo.cpp does _not_ use them to keep the code easy to copy)
+// - Wrapper for standard lib functions. (Note that imgui_demo.cpp does _not_ use them to keep the code easy to copy)
 #ifndef IMGUI_DISABLE_MATH_FUNCTIONS
 static inline float  ImFabs(float x)                                            { return fabsf(x); }
 static inline float  ImSqrt(float x)                                            { return sqrtf(x); }

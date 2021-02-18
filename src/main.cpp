@@ -17,7 +17,7 @@ DWORD WINAPI Main(LPVOID lpThreadParameter){
 	LOGGER_INFO("ss");
 
     Hooks::DirectX::Init();
-	spdlog::get("console")->warn();
+	
 
 
     return TRUE;
