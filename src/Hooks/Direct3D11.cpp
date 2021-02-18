@@ -1,13 +1,9 @@
-//
-// Created by again on 8/21/2020.
-//
-
 #include "Direct3D11.h"
 #include "DXGI.h"
 #include <iostream>
-#include <common/include/Exceptions.h>
-
-using namespace Exceptions::Core::Exceptions;
+/*#include <common/include/Exceptions.h>*/
+/*
+using namespace Exceptions::Core::Exceptions;*/
 
 hDirect3D11::Direct3D11::Direct3D11() :
         pd3dDevice(nullptr), pd3dDeviceContext(nullptr), pSwapChain(nullptr)
@@ -19,12 +15,12 @@ hDirect3D11::Direct3D11::Direct3D11() :
 
     if (hModDXGI == nullptr)
     {
-        throw ModuleNotFoundException("Could not get handle to DXGI.dll");
+       /* throw ModuleNotFoundException("Could not get handle to DXGI.dll");*/
     }
 
     if (hModD3D11 == nullptr)
     {
-        throw ModuleNotFoundException("Could not get handle to D3D11.dll");
+        /*throw ModuleNotFoundException("Could not get handle to D3D11.dll");*/
     }
 
 
@@ -60,7 +56,7 @@ hDirect3D11::Direct3D11::Direct3D11() :
     ));
     if (hD3D11CreateDeviceAndSwapChain == nullptr)
     {
-        throw ProcAddressNotFoundException("Could not get handle to D3D11CreateDeviceAndSwapChain");
+       /* throw ProcAddressNotFoundException("Could not get handle to D3D11CreateDeviceAndSwapChain");*/
     }
 
     const auto hr11 = static_cast<HRESULT(WINAPI *)(
@@ -91,7 +87,7 @@ hDirect3D11::Direct3D11::Direct3D11() :
 
     if (FAILED(hr11))
     {
-        throw DXAPIException("Could not create D3D11 device", hr11);
+       /* throw DXAPIException("Could not create D3D11 device", hr11);*/
     }
 }
 
