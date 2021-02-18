@@ -13,8 +13,9 @@ message(${CMAKE_CURRENT_SOURCE_DIR}/resources)
 set(THREADS_PREFER_PTHREAD_FLAD ON)
 find_package(Threads REQUIRED)
 
-add_subdirectory (libs/imgui)
+add_subdirectory(libs/imgui)
 add_subdirectory(libs/spdlog)
+add_subdirectory(libs/steam)
 
 include_directories(${EXECUTABLE}
 	${INCLUDE_DIR}
@@ -47,4 +48,5 @@ target_link_libraries(${EXECUTABLE}
 	dxgi.dll
 	imgui
 	spdlog::spdlog_header_only
+	steam
 )
