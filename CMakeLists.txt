@@ -3,9 +3,8 @@ project(F4MP_Client)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} CMakeModules/)
 
-set(EXECUTABLE F4MP_Client)
-set(SRC_DIR ./src)
-set(INCLUDE_DIR ./include)
+set(SRC_DIR src)
+set(INCLUDE_DIR include)
 
 add_definitions(-D_RESOURCES="${CMAKE_CURRENT_SOURCE_DIR}/resources/")
 message(${CMAKE_CURRENT_SOURCE_DIR}/resources)
@@ -19,27 +18,26 @@ add_subdirectory(libs/steam)
 add_subdirectory(libs/steamnetwork)
 add_subdirectory(libs/hooks)
 
-include_directories(${EXECUTABLE}
+include_directories(${PROJECT_NAME}
 	${INCLUDE_DIR}
 	${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-file(GLOB SourceFiles 
+file(GLOB SRC_FILES
 	${SRC_DIR}/*
 	${SRC_DIR}/Utils/*
 	${SRC_DIR}/ThirdParty/*
 	${SRC_DIR}/Hooks/*
 )
 
+add_library(${PROJECT_NAME} SHARED ${SRC_FILES})
 
-add_library(${EXECUTABLE} SHARED ${SourceFiles})
-
-set_target_properties(${EXECUTABLE} PROPERTIES
+set_target_properties(${PROJECT_NAME} PROPERTIES
 	CXX_STANDARD 17
 	CXX_EXTENSIONS ON
 )
 
-target_link_libraries(${EXECUTABLE}
+target_link_libraries(${PROJECT_NAME}
 	${CMAKE_DL_LIBS}
 	d3d11.lib
 	dxgi.dll
