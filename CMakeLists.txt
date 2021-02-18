@@ -31,7 +31,6 @@ file(GLOB SourceFiles
 	${SRC_DIR}/Hooks/*
 )
 
-add_subdirectory(Common)
 
 add_library(${EXECUTABLE} SHARED ${SourceFiles})
 
@@ -43,7 +42,6 @@ set_target_properties(${EXECUTABLE} PROPERTIES
 target_link_libraries(${EXECUTABLE}
 	${CMAKE_DL_LIBS}
 	${CMAKE_CURRENT_SOURCE_DIR}/lib/detours.lib
-	Common
 	d3d11.lib
 	dxgi.dll
 	imgui
