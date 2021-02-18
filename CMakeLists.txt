@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.7)
-project(F4MP_Client)
+project(F4MPClient)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} CMakeModules/)
 
