@@ -17,6 +17,7 @@ add_subdirectory(libs/imgui)
 add_subdirectory(libs/spdlog)
 add_subdirectory(libs/steam)
 add_subdirectory(libs/steamnetwork)
+add_subdirectory(libs/hooks)
 
 include_directories(${EXECUTABLE}
 	${INCLUDE_DIR}
@@ -49,4 +50,5 @@ target_link_libraries(${EXECUTABLE}
 	spdlog::spdlog_header_only
 	Steam
 	SteamNetwork
+	Hooks
 )
