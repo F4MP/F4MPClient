@@ -1,10 +1,5 @@
-#include "Global.h"
-#include "DirectXHook.h"
-
-#include <common/include/GamePtr.h>
-#include <common/include/Utilities.h>
-#include <common/include/Types.h>
-#include <common/include/Hook.h>
+/*#include "Global.h"
+#include "DirectXHook.h"*/
 
 #include "Game.h"
 #include "Logger.h"
@@ -16,7 +11,7 @@ DWORD WINAPI Main(LPVOID lpThreadParameter){
 
 	LOGGER_INFO("ss");
 
-    Hooks::DirectX::Init();
+  /*  Hooks::DirectX::Init();*/
 
 
 

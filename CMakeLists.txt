@@ -41,7 +41,6 @@ set_target_properties(${EXECUTABLE} PROPERTIES
 
 target_link_libraries(${EXECUTABLE}
 	${CMAKE_DL_LIBS}
-	${CMAKE_CURRENT_SOURCE_DIR}/lib/detours.lib
 	d3d11.lib
 	dxgi.dll
 	imgui
