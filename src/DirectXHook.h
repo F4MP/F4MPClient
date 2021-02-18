@@ -59,7 +59,7 @@ namespace Hooks {
         }
 
         void Init(){
-            try
+         /*   try
             {
                 const std::unique_ptr<hDirect3D11::Direct3D11> d3d11(new hDirect3D11::Direct3D11);
                 auto vtable = d3d11->vtable();
@@ -102,7 +102,7 @@ namespace Hooks {
             catch (RuntimeException& ex)
             {
                 spdlog::error("D3D11 runtime error: {}",ex.what());
-            }
+            }*/
         }
 
         void Pre_Render(IDXGISwapChain* swapChain){

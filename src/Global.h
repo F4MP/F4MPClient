@@ -11,10 +11,7 @@
 #include <d3d11.h>
 
 //spdlog
-#include <spdlog/spdlog.h>
-#include <spdlog/sinks/basic_file_sink.h>
-#include <spdlog/sinks/stdout_color_sinks.h>
-#include <spdlog/async.h>
+
 
 
 IDXGISwapChain *g_d3d11SwapChain = nullptr;

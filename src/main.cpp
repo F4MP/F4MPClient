@@ -7,21 +7,17 @@
 #include <common/include/Hook.h>
 
 #include "Game.h"
+#include "Logger.h"
 
 DWORD WINAPI Main(LPVOID lpThreadParameter){
-    //LOGGING
-    AllocConsole();
-    freopen_s((FILE**)stdout, "CONOUT$", "w", stdout);
-    auto console = spdlog::stdout_color_mt("console");
-    auto async_file = spdlog::basic_logger_mt<spdlog::async_factory>("f4mp_logger", "logs/f4mp.txt");
 
-    spdlog::set_default_logger(async_file);
 
-    spdlog::get("console")->info("F4MP Console Loaded");
+	LOGGER_INIT();
 
+	LOGGER_INFO("ss");
 
     Hooks::DirectX::Init();
-
+	spdlog::get("console")->warn();
 
 
     return TRUE;
